@@ -29,7 +29,7 @@ class SsoController extends Controller
                 $user = \DB::table('users')->where('email', $authMarkerData['email'])->first();
                 if ($user) {
                     Auth::loginUsingId($user->id);
-                    return redirect()->intended('/dashboard');
+                    return redirect()->intended('/');
                 }
             }
         }
