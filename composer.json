@@ -9,7 +9,8 @@
             "email": "xgigabaitx@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
         "php": "^7.3|^8.0",
         "illuminate/support": "^9.0"
