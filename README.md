@@ -37,6 +37,8 @@ Make sure the secret key is 32 characters long.
 2. Redirect the user to the /sso-login route with a GET parameter auth_marker containing the encrypted user data in JSON format. For example:
 
 ```php
+use Illuminate\Encryption\Encrypter;
+
 public function redirectToAppB()
 {
     $user = Auth::user();
