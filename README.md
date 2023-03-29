@@ -1,3 +1,6 @@
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/gigabait/laravel-sso.svg?style=flat-square)](https://packagist.org/packages/gigabait/laravel-sso)
+[![Total Downloads](https://img.shields.io/packagist/dt/gigabait/laravel-sso.svg?style=flat-square)](https://packagist.org/packages/gigabait/laravel-sso)
+
 # Laravel SSO
 
 Laravel SSO is a PHP library for implementing single sign-on (SSO) authorizations in Laravel web applications.
