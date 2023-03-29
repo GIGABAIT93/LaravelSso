@@ -37,4 +37,4 @@ The package follows PSR-4 autoloading standards. The namespace prefix `Gigabait\
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/gigabait93/laravel-sso/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/GIGABAIT93/LaravelSso/blob/main/LICENSE) file for details.
