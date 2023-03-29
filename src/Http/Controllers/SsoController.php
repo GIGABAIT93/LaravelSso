@@ -5,31 +5,32 @@ namespace Gigabait\Sso\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Encryption\Encrypter;
 
 class SsoController extends Controller
 {
     public function login(Request $request)
     {
-        if ($request->has('auth_marker')) {
+
+        if ($request->has('token')) {
+            $secretKey = config('sso.secret_key');
+            $cipher = config('app.cipher');
+            $encrypter = new Encrypter($secretKey, $cipher);
+            $encryptedToken = $request->input('token');
             try {
-                $authMarkerData = json_decode(Crypt::decrypt($request->input('auth_marker')), true);
-
-                $secretKey = config('sso.secret_key');
-                if (hash_equals($authMarkerData['secret_key'], $secretKey)) {
-                    $user = User::where('email', $authMarkerData['email'])->first();
-                    if ($user) {
-                        Auth::login($user);
-
-                        return redirect()->intended('/dashboard');
-                    }
-                }
-            } catch (\Exception $e) {
-                // If something went wrong, go back to the login form
+                $decryptedToken = $encrypter->decrypt($encryptedToken);
+            } catch (Illuminate\Contracts\Encryption\DecryptException $e) {
                 return redirect('/login');
             }
+            $authMarkerData = json_decode($decryptedToken, true);
+            if (hash_equals($authMarkerData['secret_key'], $secretKey)) {
+                $user = \DB::table('users')->where('email', $authMarkerData['email'])->first();
+                if ($user) {
+                    Auth::loginUsingId($user->id);
+                    return redirect()->intended('/dashboard');
+                }
+            }
         }
-
         return redirect('/login');
     }
 }
