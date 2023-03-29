@@ -29,6 +29,7 @@ This command will publish the config/sso.php file, where you can set the secret 
 ```env
 SSO_SECRET_KEY=your_secret_key
 ```
+Make sure the secret key is 32 characters long.
 
 ## Usage
 
@@ -36,35 +37,36 @@ SSO_SECRET_KEY=your_secret_key
 2. Redirect the user to the /sso-login route with a GET parameter auth_marker containing the encrypted user data in JSON format. For example:
 
 ```php
-$authMarkerData = [
-    'email' => $user->email,
-    'secret_key' => config('sso.secret_key')
-];
+public function redirectToAppB()
+{
+    $user = Auth::user();
+    $authMarkerData = [
+        'email' => $user->email,
+        'secret_key' => config('sso.secret_key')
+    ];
 
-$encryptedAuthMarker = Crypt::encrypt(json_encode($authMarkerData));
+    $key = config('sso.secret_key');
+    $cipher = config('app.cipher');
+    $encrypter = new Encrypter($key, $cipher);
+    $token = json_encode($authMarkerData);
+    $encryptedToken = $encrypter->encrypt($token);
 
-$url = url('/sso-login', ['auth_marker' => $encryptedAuthMarker]);
+    header("Location: https://app-b.example.com/sso-login?token=" . urlencode($encryptedToken));
+}
 ```
 After being redirected to the /sso-login route, the user will be automatically authorized on the Laravel panel if their email address matches a record in the database.
 
-The package provides a `SsoServiceProvider` that you can add to the providers array in your Laravel application config:
+## Note
 
-```php
-// config/app.php
+Make sure both applications use the same SSO_SECRET_KEY in their respective .env files. This is required for the encryption and decryption process to work correctly. The key must be 32 characters long.
 
-'providers' => [
-    // ...
-    Gigabait\Sso\SsoServiceProvider::class,
-],
-```
+## Error Handling
+
+If an error occurs during the SSO process, the user will be redirected to the login page of App B. If the secret key length is not 32 characters, an error message will be displayed.
 
 ## Support
 
 If you have any questions or issues, please create a new issue in the project repository on GitHub.
-
-## Autoloading
-
-The package follows PSR-4 autoloading standards. The namespace prefix `Gigabait\\Sso\\` maps to the `src/` directory.
 
 ## License
 
