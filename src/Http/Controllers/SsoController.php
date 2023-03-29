@@ -22,7 +22,7 @@ class SsoController extends Controller
             try {
                 $decryptedToken = $encrypter->decrypt($encryptedToken);
             } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
-                return redirect('/login');
+                return redirect('/login')->withErrors(['sso_error' => $e->getMessage()]);;
             }
             $authMarkerData = json_decode($decryptedToken, true);
             if (hash_equals($authMarkerData['secret_key'], $secretKey)) {
