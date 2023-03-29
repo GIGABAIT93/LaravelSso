@@ -1,0 +1,30 @@
+{
+    "name": "gigabait/laravel-sso",
+    "description": "Laravel library for implementing SSO authorizations",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "GIGABAIT",
+        "email": "xgigabaitx@gmail.com"
+      }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+      "php": "^7.3|^8.0",
+      "illuminate/support": "^8.0"
+    },
+    "autoload": {
+      "psr-4": {
+        "Gigabait\\Sso\\": "src/"
+      }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "Gigabait\\Sso\\SsoServiceProvider"
+        ]
+      }
+    }
+  }
+  
