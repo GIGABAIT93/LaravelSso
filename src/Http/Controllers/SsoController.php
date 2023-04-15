@@ -12,6 +12,17 @@ class SsoController extends Controller
     public function login(Request $request)
     {
         if ($request->has('token')) {
+
+            if ($request->has('param')) {
+                $param = $request->input('param');
+                dd($param);
+                if (isset($param['server'])) {
+                    # code...
+                }
+            }
+
+
+
             $secretKey = config('sso.secret_key');
             if (strlen($secretKey) !== 32) {
                 return redirect('/login')->withErrors(['sso_error' => 'Secret key length must be 32 characters.']);
