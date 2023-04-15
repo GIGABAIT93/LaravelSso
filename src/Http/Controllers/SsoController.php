@@ -11,17 +11,15 @@ class SsoController extends Controller
 {
     public function login(Request $request)
     {
+        $route = '/';
         if ($request->has('token')) {
 
             if ($request->has('param')) {
-                $param = json_decode($request->input('param'));
-                dd($param);
+                $param = json_decode($request->input('param'), true);
                 if (isset($param['server'])) {
-                    # code...
+                    $route = "/server/{$param['server']}";
                 }
             }
-
-
 
             $secretKey = config('sso.secret_key');
             if (strlen($secretKey) !== 32) {
@@ -40,7 +38,7 @@ class SsoController extends Controller
                 $user = \DB::table('users')->where('email', $authMarkerData['email'])->first();
                 if ($user) {
                     Auth::loginUsingId($user->id);
-                    return redirect()->intended('/');
+                    return redirect()->intended($route);
                 }
             }
         }
