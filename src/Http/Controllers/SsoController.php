@@ -14,7 +14,7 @@ class SsoController extends Controller
         if ($request->has('token')) {
 
             if ($request->has('param')) {
-                $param = $request->input('param');
+                $param = json_decode($request->input('param'));
                 dd($param);
                 if (isset($param['server'])) {
                     # code...
